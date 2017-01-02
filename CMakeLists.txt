@@ -28,11 +28,18 @@ set(COMPILE_OPTIONS
 	-Wformat-signedness 
 	-Wsuggest-final-types 
 	-Wsuggest-final-methods 
-	-Wsuggest-override)
+	-Wsuggest-override
+)
 
 set(LIB_HEADERS
+	include/Handler.h
 	include/Packet.h
-	include/Port.h)
+	include/Port.h
+	include/PortBase.h
+	include/PortHandler.h
+	include/PortHandlerBase.h
+)
+
 add_custom_target(includes SOURCES ${LIB_HEADERS})
 
 include_directories(include)

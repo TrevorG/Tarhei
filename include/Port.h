@@ -1,19 +1,20 @@
 #pragma once
 
 #include <Packet.h>
+#include <PortBase.h>
+#include <PortHandlerBase.h>
 
 #include <utility>
 
 namespace Tarhei {
 
 template <typename PortHandlerType>
-class Port
+class Port : public PortBase
 {
 public:
 	Port(PortHandlerType h); //no reference, because we are copying this anyway
 
-	template <typename PacketDataType>
-	void receive(const Packet<PacketDataType>& packet);
+	PortHandlerType& getHandler() override;
 
 private:
 	PortHandlerType handler;
@@ -25,10 +26,10 @@ Port<PortHandlerType>::Port(PortHandlerType h)
 {}
 
 template <typename PortHandlerType>
-template <typename PacketDataType>
-void Port<PortHandlerType>::receive(const Packet<PacketDataType>& packet)
+PortHandlerType& Port<PortHandlerType>::getHandler()
 {
-	handler.handle(packet); //TODO: add static_assert?
+	//TODO: add static_assert for deriving from PortHAndlerBase
+	return handler;
 }
 
 template <typename PortHandlerType, typename... Args>
