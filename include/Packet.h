@@ -4,16 +4,16 @@
 
 namespace Tarhei {
 
-template <typename DataType>
+template <typename PacketDataType>
 class Packet
 {
 public:
-	Packet(DataType d); //no reference, because we are copying this anyway
+	Packet(PacketDataType d); //no reference, because we are copying this anyway
 
-	const DataType& get_data() const;
+	const PacketDataType& get_data() const;
 
 private:
-	DataType data;
+	PacketDataType data;
 };
 
 template <typename DataType>
