@@ -12,17 +12,25 @@ template <typename PortHandlerType>
 class Port : public PortBase
 {
 public:
-	Port(PortHandlerType h); //no reference, because we are copying this anyway
+	Port(PortHandlerType& h);
 
 	PortHandlerType& getHandler() override;
 
+	void link(PortBase&);
+
+	template <typename PacketDataType>
+	void send(const Packet<PacketDataType>&);
+
 private:
-	PortHandlerType handler;
+	PortHandlerType& handler;
+
+	PortBase *linkedPort;
 };
 
 template <typename PortHandlerType>
-Port<PortHandlerType>::Port(PortHandlerType h)
+Port<PortHandlerType>::Port(PortHandlerType& h)
 	: handler(h)
+	, linkedPort(nullptr)
 {}
 
 template <typename PortHandlerType>
@@ -32,10 +40,30 @@ PortHandlerType& Port<PortHandlerType>::getHandler()
 	return handler;
 }
 
-template <typename PortHandlerType, typename... Args>
-Port<PortHandlerType> make_port(Args&&... args)
+template <typename PortHandlerType>
+void Port<PortHandlerType>::link(PortBase& pb)
 {
-	return Port<PortHandlerType>(PortHandlerType(std::forward<Args>(args)...));
+	linkedPort = &pb;
+}
+
+template <typename PortHandlerType>
+template <typename PacketDataType>
+void Port<PortHandlerType>::send(const Packet<PacketDataType>& p)
+{
+	if(linkedPort)
+	{
+		linkedPort->receive(p);
+	}
+	else
+	{
+		//TODO: some log about not linked port? Error maybe?
+	}
+}
+
+template <typename PortHandlerType>
+Port<PortHandlerType> make_port(PortHandlerType& handler)
+{
+	return Port<PortHandlerType>(handler);
 }
 
 } /* namespace Tarhei */

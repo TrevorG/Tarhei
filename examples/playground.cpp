@@ -22,14 +22,26 @@ public:
 	}
 };
 
+class DummyPort : public PortHandler<>
+{
+
+};
+
 int main(int, char **)
 {
+	CoutDumperPort receiver_port_handler;
+	DummyPort sender_port_handler;
 	auto packet_string = make_packet<string>("Test_packet");
 	auto packet_int = make_packet<int>(43);
-	auto port = make_port<CoutDumperPort>();
+	auto sender_port = make_port(sender_port_handler);
+	auto receiver_port = make_port(receiver_port_handler);
 
-	port.receive(packet_string);
-	port.receive(packet_int);
+	std::cout << "Should not emit anything:" << std::endl;
+	sender_port.send(packet_string);
+	sender_port.link(receiver_port);
+	std::cout << "Should emit something:" << std::endl;
+	sender_port.send(packet_string);
+	sender_port.send(packet_int);
 
 	return 0;
 }

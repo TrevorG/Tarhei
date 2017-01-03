@@ -25,6 +25,7 @@ void PortBase::receive(const Packet<PacketDataType>& packet)
 	auto handler = dynamic_cast<Handler<PacketDataType> *>(&getHandler());
 	if(handler)
 	{
+		//TODO: pass *this as argument
 		handler->handle(packet);
 	}
 	else
