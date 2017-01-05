@@ -8,6 +8,8 @@
 
 namespace Tarhei {
 
+//TODO: consider removing this template parameter
+//it seems that we only use it for getHandler() (for now)
 template <typename PortHandlerType>
 class Port : public PortBase
 {
