@@ -9,7 +9,7 @@ class PortBase
 {
 public:
 	template <typename PacketDataType>
-	void receive(const Packet<PacketDataType>& packet);
+	void receive(Packet<PacketDataType>& packet);
 
 	virtual PortHandlerBase& getHandler() = 0;
 
@@ -18,7 +18,7 @@ public:
 };
 
 template <typename PacketDataType>
-void PortBase::receive(const Packet<PacketDataType>& packet)
+void PortBase::receive(Packet<PacketDataType>& packet)
 {
 	//TODO: this is some kind of hack. It needs performace measurements and
 	//some improvements (maybe even rework)

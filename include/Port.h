@@ -21,7 +21,7 @@ public:
 	void link(PortBase&);
 
 	template <typename PacketDataType>
-	void send(const Packet<PacketDataType>&);
+	void send(Packet<PacketDataType>&);
 
 private:
 	PortHandlerType& handler;
@@ -50,7 +50,7 @@ void Port<PortHandlerType>::link(PortBase& pb)
 
 template <typename PortHandlerType>
 template <typename PacketDataType>
-void Port<PortHandlerType>::send(const Packet<PacketDataType>& p)
+void Port<PortHandlerType>::send(Packet<PacketDataType>& p)
 {
 	if(linkedPort)
 	{

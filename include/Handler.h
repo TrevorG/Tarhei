@@ -10,7 +10,7 @@ class Handler
 {
 //TODO: add helper static_assert for user to ensure that all methods are overriden
 public:
-	virtual void handle(const Packet<PacketDataType>&) = 0;
+	virtual void handle(Packet<PacketDataType>&) = 0;
 };
 
 }

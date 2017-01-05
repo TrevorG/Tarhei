@@ -11,12 +11,12 @@ using namespace std;
 class CoutDumperPort : public PortHandler<string, int>
 {
 public:
-	void handle(const Packet<string>& p) override
+	void handle(Packet<string>& p) override
 	{
 		std::cout << "Received string packet: " << p.get_data() << std::endl;
 	}
 
-	void handle(const Packet<int>& p) override
+	void handle(Packet<int>& p) override
 	{
 		std::cout << "Received int packet: " << p.get_data() << std::endl;
 	}
