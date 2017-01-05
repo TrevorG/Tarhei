@@ -13,7 +13,7 @@ public:
 	//TODO: consider generating this getter only for PacketDataType
 	//without specific trait
 	PacketDataType& getData();
-	const PacketDataType& get_data() const;
+	const PacketDataType& getData() const;
 
 private:
 	PacketDataType data;
@@ -31,7 +31,7 @@ PacketDataType& Packet<PacketDataType>::getData()
 }
 
 template <typename DataType>
-const DataType& Packet<DataType>::get_data() const
+const DataType& Packet<DataType>::getData() const
 {
 	return data;
 }

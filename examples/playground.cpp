@@ -13,12 +13,12 @@ class CoutDumperPort : public PortHandler<string, int>
 public:
 	void handle(Packet<string>& p) override
 	{
-		std::cout << "Received string packet: " << p.get_data() << std::endl;
+		std::cout << "Received string packet: " << p.getData() << std::endl;
 	}
 
 	void handle(Packet<int>& p) override
 	{
-		std::cout << "Received int packet: " << p.get_data() << std::endl;
+		std::cout << "Received int packet: " << p.getData() << std::endl;
 	}
 };
 
