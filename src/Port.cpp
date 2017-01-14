@@ -11,6 +11,7 @@ Port::Port(Component& owner_)
 void Port::link(Port& pb)
 {
 	linkedPort = &pb;
+	pb.linkedPort = this;
 }
 
 }
