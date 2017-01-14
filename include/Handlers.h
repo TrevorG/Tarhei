@@ -5,6 +5,8 @@
 namespace Tarhei
 {
 
+class Port;
+
 namespace detail
 {
 
@@ -12,7 +14,7 @@ template <class PacketDataType>
 class SingleHandler
 {
 public:
-	virtual void handle(Packet<PacketDataType>&) = 0;
+	virtual void handle(const Port&, Packet<PacketDataType>&) = 0;
 };
 
 }

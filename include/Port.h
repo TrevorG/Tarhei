@@ -45,8 +45,7 @@ void Port::receive(Packet<PacketDataType>& packet)
 	auto handler = dynamic_cast<detail::SingleHandler<PacketDataType> *>(&owner);
 	if(handler)
 	{
-		//TODO: pass *this as argument
-		handler->handle(packet);
+		handler->handle(*this, packet);
 	}
 	else
 	{
