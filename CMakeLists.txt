@@ -32,12 +32,10 @@ set(COMPILE_OPTIONS
 )
 
 set(LIB_HEADERS
-	include/Handler.h
+        include/Component.h
+        include/Handlers.h
 	include/Packet.h
-	include/Port.h
-	include/PortBase.h
-	include/PortHandler.h
-	include/PortHandlerBase.h
+        include/Port.h
 )
 
 add_custom_target(includes SOURCES ${LIB_HEADERS})

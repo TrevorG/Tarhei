@@ -1,6 +1,7 @@
 #include <Packet.h>
 #include <Port.h>
-#include <PortHandler.h>
+#include <Component.h>
+#include <Handlers.h>
 
 #include <iostream>
 #include <string>
@@ -8,7 +9,9 @@
 using namespace Tarhei;
 using namespace std;
 
-class CoutDumperPort : public PortHandler<string, int>
+class CoutDumper :
+	public Component,
+	public Handlers<string, int>
 {
 public:
 	void handle(Packet<string>& p) override
@@ -22,26 +25,29 @@ public:
 	}
 };
 
-class DummyPort : public PortHandler<>
+class DummyComponent :
+	public Component
 {
 
 };
 
 int main(int, char **)
 {
-	CoutDumperPort receiver_port_handler;
-	DummyPort sender_port_handler;
+	CoutDumper receiver;
+	DummyComponent sender;
+
+	Port sender_outport(sender);
+	Port receiver_inport(receiver);
+
 	auto packet_string = make_packet<string>("Test_packet");
 	auto packet_int = make_packet<int>(43);
-	auto sender_port = make_port(sender_port_handler);
-	auto receiver_port = make_port(receiver_port_handler);
 
 	std::cout << "Should not emit anything:" << std::endl;
-	sender_port.send(packet_string);
-	sender_port.link(receiver_port);
+	sender_outport.send(packet_string);
+	sender_outport.link(receiver_inport);
 	std::cout << "Should emit something:" << std::endl;
-	sender_port.send(packet_string);
-	sender_port.send(packet_int);
+	sender_outport.send(packet_string);
+	sender_outport.send(packet_int);
 
 	return 0;
 }

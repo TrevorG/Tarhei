@@ -1,56 +1,61 @@
 #pragma once
 
 #include <Packet.h>
-#include <PortBase.h>
-#include <PortHandlerBase.h>
+#include <Component.h>
+#include <Handlers.h>
 
 #include <utility>
 
 namespace Tarhei {
 
-//TODO: consider removing this template parameter
-//it seems that we only use it for getHandler() (for now)
-template <typename PortHandlerType>
-class Port : public PortBase
+class Port
 {
 public:
-	Port(PortHandlerType& h);
+	Port(Component& owner_);
 
-	PortHandlerType& getHandler() override;
+	void link(Port&);
 
-	void link(PortBase&);
+	template <typename PacketDataType>
+	void receive(Packet<PacketDataType>& packet);
 
 	template <typename PacketDataType>
 	void send(Packet<PacketDataType>&);
 
 private:
-	PortHandlerType& handler;
+	Component& owner;
 
-	PortBase *linkedPort;
+	Port *linkedPort;
 };
 
-template <typename PortHandlerType>
-Port<PortHandlerType>::Port(PortHandlerType& h)
-	: handler(h)
+Port::Port(Component& owner_)
+	: owner(owner_)
 	, linkedPort(nullptr)
 {}
 
-template <typename PortHandlerType>
-PortHandlerType& Port<PortHandlerType>::getHandler()
-{
-	//TODO: add static_assert for deriving from PortHAndlerBase
-	return handler;
-}
-
-template <typename PortHandlerType>
-void Port<PortHandlerType>::link(PortBase& pb)
+void Port::link(Port& pb)
 {
 	linkedPort = &pb;
 }
 
-template <typename PortHandlerType>
 template <typename PacketDataType>
-void Port<PortHandlerType>::send(Packet<PacketDataType>& p)
+void Port::receive(Packet<PacketDataType>& packet)
+{
+	//TODO: this is some kind of hack. It needs performace measurements and
+	//some improvements (maybe even rework)
+	auto handler = dynamic_cast<detail::SingleHandler<PacketDataType> *>(&owner);
+	if(handler)
+	{
+		//TODO: pass *this as argument
+		handler->handle(packet);
+	}
+	else
+	{
+		//FIXME: log about default handle method
+	}
+}
+
+template <typename PacketDataType>
+void Port::send(Packet<PacketDataType>& p)
 {
 	if(linkedPort)
 	{
@@ -60,12 +65,6 @@ void Port<PortHandlerType>::send(Packet<PacketDataType>& p)
 	{
 		//TODO: some log about not linked port? Error maybe?
 	}
-}
-
-template <typename PortHandlerType>
-Port<PortHandlerType> make_port(PortHandlerType& handler)
-{
-	return Port<PortHandlerType>(handler);
 }
 
 } /* namespace Tarhei */
