@@ -23,19 +23,8 @@ public:
 
 private:
 	Component& owner;
-
 	Port *linkedPort;
 };
-
-Port::Port(Component& owner_)
-	: owner(owner_)
-	, linkedPort(nullptr)
-{}
-
-void Port::link(Port& pb)
-{
-	linkedPort = &pb;
-}
 
 template <typename PacketDataType>
 void Port::receive(Packet<PacketDataType>& packet)

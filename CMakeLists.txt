@@ -38,10 +38,13 @@ set(LIB_HEADERS
         include/Port.h
 )
 
+set(LIB_SOURCES
+        src/Port.cpp
+)
+
 add_custom_target(includes SOURCES ${LIB_HEADERS})
 
 include_directories(include)
-file(GLOB LIB_SOURCES src/*.cpp)
 add_library(Tarhei SHARED ${LIB_SOURCES})
 target_compile_options(Tarhei PUBLIC ${COMPILE_OPTIONS})
 
