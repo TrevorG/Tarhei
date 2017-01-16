@@ -14,12 +14,12 @@ class CoutDumper :
 	public Handlers<string, int>
 {
 public:
-	void handle(const Port&, Packet<string>& p) override
+	void handle(const Port&, Packet<string>&& p) override
 	{
 		std::cout << "Received string packet: " << p.getData() << std::endl;
 	}
 
-	void handle(const Port&, Packet<int>& p) override
+	void handle(const Port&, Packet<int>&& p) override
 	{
 		std::cout << "Received int packet: " << p.getData() << std::endl;
 	}
@@ -30,7 +30,7 @@ class SourceComponent :
 	public Handlers<double>
 {
 public:
-	void handle(const Port&, Packet<double>& p) override
+	void handle(const Port&, Packet<double>&& p) override
 	{
 		std::cout << "Source received packet with double value: " << p.getData() << std::endl;
 	}
@@ -49,12 +49,12 @@ int main(int, char **)
 	auto packet_double = make_packet<double>(13.37);
 
 	std::cout << "Should not emit anything:" << std::endl;
-	sender_outport.send(packet_string);
+	sender_outport.send(std::move(packet_string));
 	sender_outport.link(receiver_inport);
 	std::cout << "Should emit something:" << std::endl;
-	sender_outport.send(packet_string);
-	sender_outport.send(packet_int);
-	receiver_inport.send(packet_double);
+	sender_outport.send(std::move(packet_string));
+	sender_outport.send(std::move(packet_int));
+	receiver_inport.send(std::move(packet_double));
 
 	return 0;
 }

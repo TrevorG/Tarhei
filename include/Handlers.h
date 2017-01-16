@@ -14,7 +14,7 @@ template <class PacketDataType>
 class SingleHandler
 {
 public:
-	virtual void handle(const Port&, Packet<PacketDataType>&) = 0;
+	virtual void handle(const Port&, Packet<PacketDataType>&&) = 0;
 };
 
 }

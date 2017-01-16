@@ -16,10 +16,10 @@ public:
 	void link(Port&);
 
 	template <typename PacketDataType>
-	void receive(Packet<PacketDataType>& packet);
+	void receive(Packet<PacketDataType>&& packet);
 
 	template <typename PacketDataType>
-	void send(Packet<PacketDataType>&);
+	void send(Packet<PacketDataType>&&);
 
 private:
 	Component& owner;
@@ -27,14 +27,14 @@ private:
 };
 
 template <typename PacketDataType>
-void Port::receive(Packet<PacketDataType>& packet)
+void Port::receive(Packet<PacketDataType>&& packet)
 {
 	//TODO: this is some kind of hack. It needs performace measurements and
 	//some improvements (maybe even rework)
 	auto handler = dynamic_cast<detail::SingleHandler<PacketDataType> *>(&owner);
 	if(handler)
 	{
-		handler->handle(*this, packet);
+		handler->handle(*this, std::move(packet));
 	}
 	else
 	{
@@ -43,11 +43,11 @@ void Port::receive(Packet<PacketDataType>& packet)
 }
 
 template <typename PacketDataType>
-void Port::send(Packet<PacketDataType>& p)
+void Port::send(Packet<PacketDataType>&& p)
 {
 	if(linkedPort)
 	{
-		linkedPort->receive(p);
+		linkedPort->receive(std::move(p));
 	}
 	else
 	{
